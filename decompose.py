@@ -21,7 +21,9 @@ for r, d, f in os.walk("./luad_tcga_pub"):
         # print(V.shape)
         model = GaussianMixture(n_components=1,covariance_type="spherical").fit(V)
         sc = model.score(V)
-        print(fname, sc)
-        if sc<-3.4:
-            sns.distplot(V, rug=True)
-            plt.show()
+        figname = os.path.join( "./img/", os.path.splitext(fname)[0]+'.png')
+        print('![plt]({})'.format(figname))
+        sns.set_style("ticks")
+        sns.distplot(V, rug=True)
+        plt.savefig(figname)
+        plt.clf()
