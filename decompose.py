@@ -7,6 +7,8 @@ from sklearn.mixture import GaussianMixture
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+print("## Analysis of LUAD pathways")
+print("Figure | Datafile")
 results = pd.DataFrame()
 for r, d, f in os.walk("./luad_tcga_pub"):
     for fname in f:
@@ -18,11 +20,13 @@ for r, d, f in os.walk("./luad_tcga_pub"):
         svd = TruncatedSVD(n_components=1)
         svd.fit(X.T)
         V = svd.transform(X.T)
-        # print(V.shape)
-        model = GaussianMixture(n_components=1,covariance_type="spherical").fit(V)
-        sc = model.score(V)
+        out_frame = pd.DataFrame(data=V.T,columns=frame.columns,index=[0])
+        out_frame.sort_values(by=[0], axis=1, ascending=True, inplace=True)
+        dataname = os.path.join( "./out/", os.path.splitext(fname)[0]+'.txt')
+        out_frame.to_csv(path_or_buf=dataname, sep='\t',index=False)
         figname = os.path.join( "./img/", os.path.splitext(fname)[0]+'.png')
-        print('![plt]({})'.format(figname))
+        # Write markdown links
+        print('![plt]({}) | [values]({})'.format(figname,dataname))
         sns.set_style("ticks")
         sns.distplot(V, rug=True)
         plt.savefig(figname)
