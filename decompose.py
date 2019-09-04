@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 print("## Analysis of LUAD pathways")
-print("Figure | Datafile")
 results = pd.DataFrame()
 for r, d, f in os.walk("./luad_tcga_pub"):
     for fname in f:
@@ -26,7 +25,7 @@ for r, d, f in os.walk("./luad_tcga_pub"):
         out_frame.to_csv(path_or_buf=dataname, sep='\t',index=False)
         figname = os.path.join( "./img/", os.path.splitext(fname)[0]+'.png')
         # Write markdown links
-        print('![plt]({}) | [values]({})'.format(figname,dataname))
+        print('![plt]({}) [values]({})'.format(figname,dataname))
         sns.set_style("ticks")
         sns.distplot(V, rug=True)
         plt.savefig(figname)
